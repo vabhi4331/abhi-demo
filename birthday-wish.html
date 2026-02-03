@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Birthday Journey 🎂🗺️</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  font-family:Arial,sans-serif;
+  min-height:100vh;
+  background:linear-gradient(45deg,#ff6b6b,#ffd93d,#6bcf7f,#4d96ff);
+  background-size:400% 400%;
+  animation:bg 15s ease infinite;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:20px;
+}
+@keyframes bg{
+  0%,100%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+}
+
+#app{width:100%;max-width:520px}
+
+/* PAGE */
+.page{
+  min-height:90vh;
+  background:rgba(255,255,255,0.95);
+  border-radius:20px;
+  padding:30px 20px;
+  box-shadow:0 20px 40px rgba(0,0,0,0.3);
+  display:none;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  animation:openPage 0.8s ease;
+}
+.page.active{display:flex}
+
+@keyframes openPage{
+  from{opacity:0;transform:translateY(40px) scale(0.9)}
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
+
+h1{color:#ff4757;margin-bottom:12px}
+p{font-size:1.1em;margin-bottom:12px}
+
+.nav-btn{
+  background:#ff6b6b;
+  color:#fff;
+  border:none;
+  padding:12px 26px;
+  border-radius:30px;
+  cursor:pointer;
+  margin:10px;
+}
+
+/* IMAGE BOX */
+.img-box{
+  width:180px;
+  height:180px;
+  border-radius:15px;
+  overflow:hidden;
+  box-shadow:0 8px 20px rgba(0,0,0,0.3);
+  margin:12px 0;
+  cursor:pointer;
+}
+.img-box img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+/* CAKE */
+.cake{
+  width:160px;
+  height:160px;
+  border-radius:50%;
+  background:#ff9a56;
+  position:relative;
+  cursor:pointer;
+}
+.cake::before{
+  content:"🎂";
+  font-size:90px;
+  position:absolute;
+  top:30px;
+  left:35px;
+}
+.wish{
+  display:none;
+  margin-top:15px;
+  color:#ff4757;
+  font-size:1.2em;
+  line-height:1.4;
+  animation:pop 0.4s ease;
+}
+@keyframes pop{
+  from{opacity:0;transform:scale(0.7)}
+  to{opacity:1;transform:scale(1)}
+}
+
+/* 🎉 SPRINKLE / CONFETTI */
+.confetti{
+  position:fixed;
+  width:10px;
+  height:10px;
+  top:-10px;
+  animation:fall 3s linear forwards;
+  z-index:999;
+}
+@keyframes fall{
+  to{
+    transform:translateY(100vh) rotate(360deg);
+    opacity:0;
+  }
+}
+
+/* 🎵 MUSIC BUTTON */
+.music-btn{
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  background:#fff;
+  border-radius:50%;
+  padding:12px;
+  font-size:22px;
+  cursor:pointer;
+  box-shadow:0 5px 15px rgba(0,0,0,0.3);
+  z-index:1000;
+}
+
+/* JOURNEY */
+.journey-road{position:relative;width:100%;margin-top:20px}
+.road-svg{width:100%}
+.emoji-point{
+  position:absolute;
+  font-size:28px;
+  cursor:pointer;
+  transition:transform 0.3s;
+}
+.emoji-point:hover{transform:scale(1.5)}
+.p1{left:12%;top:62%}
+.p2{left:25%;top:45%}
+.p3{left:40%;top:68%}
+.p4{left:55%;top:48%}
+.p5{left:70%;top:42%}
+.p6{left:82%;top:60%}
+
+/* MODAL */
+.modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.9);
+  z-index:100;
+}
+.modal-content{
+  background:#fff;
+  max-width:90%;
+  margin:10% auto;
+  padding:20px;
+  border-radius:15px;
+  text-align:center;
+}
+.modal img{max-width:240px;border-radius:10px}
+.close{float:right;font-size:28px;cursor:pointer}
+</style>
+</head>
+
+<body>
+
+<!-- 🎵 BACKGROUND MUSIC -->
+<audio id="bgMusic" loop autoplay>
+  <source src="song.mp3" type="audio/mpeg">
+</audio>
+<div class="music-btn" onclick="toggleMusic()">🎵</div>
+
+<div id="app">
+
+<!-- PAGE 1 -->
+<div class="page active">
+  <h1>🎂 Happy Birthday <span style="color:#2f3542;">ABHISHEK</span> 🎂</h1>
+  <p>Another year older, still legendary 😎</p>
+  <div class="img-box"><img src="YOUR_IMAGE_1.jpg"></div>
+  <button class="nav-btn" onclick="next()">Next →</button>
+</div>
+
+<!-- PAGE 2 -->
+<div class="page">
+  <h1>🎂 Cut the Cake</h1>
+  <p>Calories don’t count today 😋</p>
+  <div class="cake" onclick="cutCake()"></div>
+  <div class="wish" id="wish">
+    😂 May your bugs be few,<br>
+    🍕 food always be hot,<br>
+    ❤️ and life stay awesome!
+  </div>
+  <button class="nav-btn" onclick="next()">Next →</button>
+</div>
+
+<!-- PAGE 3 -->
+<div class="page">
+  <h1>💕 Memories</h1>
+  <p>Write your own memories here ❤️</p>
+  <div class="img-box"><img src="YOUR_IMAGE_2.jpg"></div>
+  <button class="nav-btn" onclick="next()">Next →</button>
+</div>
+
+<!-- PAGE 4 -->
+<div class="page">
+  <h1>📸 Photo Time</h1>
+  <div class="img-box"><img src="YOUR_IMAGE_3.jpg"></div>
+  <p>Late Night Food 🍜</p>
+  <div class="img-box"><img src="YOUR_IMAGE_4.jpg"></div>
+  <p>Random Clicks 📸</p>
+  <button class="nav-btn" onclick="next()">Next →</button>
+</div>
+
+<!-- PAGE 5 -->
+<div class="page">
+  <h1>🙏 Thank You</h1>
+  <p>For all the laughs & memories ❤️</p>
+  <div class="img-box"><img src="YOUR_IMAGE_5.jpg"></div>
+  <button class="nav-btn" onclick="next()">Journey →</button>
+</div>
+
+<!-- PAGE 6 -->
+<div class="page">
+  <h1>🗺️ Life Journey 🗺️</h1>
+  <p>Tap emojis to relive memories ✨</p>
+
+  <div class="journey-road">
+    <svg viewBox="0 0 500 200" class="road-svg">
+      <path d="M10 150 C100 50, 200 250, 300 120 S450 80, 490 140"
+            fill="none" stroke="#2f3542" stroke-width="22"/>
+      <path d="M10 150 C100 50, 200 250, 300 120 S450 80, 490 140"
+            fill="none" stroke="#fff" stroke-width="4"
+            stroke-dasharray="8 8"/>
+    </svg>
+
+    <div class="emoji-point p1">🏆</div>
+    <div class="emoji-point p2">💔</div>
+    <div class="emoji-point p3">😊</div>
+    <div class="emoji-point p4">😨</div>
+    <div class="emoji-point p5">🚀</div>
+    <div class="emoji-point p6">❤️</div>
+  </div>
+
+  <button class="nav-btn" onclick="reset()">Restart 🔄</button>
+</div>
+
+</div>
+
+<script>
+let step=0;
+const pages=document.querySelectorAll(".page");
+let musicPlaying=true;
+
+function render(){
+  pages.forEach((p,i)=>p.classList.toggle("active",i===step));
+}
+function next(){
+  if(step<pages.length-1){step++;render();}
+}
+function reset(){
+  step=0;
+  render();
+}
+
+/* 🎂 Cake Cut */
+function cutCake(){
+  document.getElementById("wish").style.display="block";
+  sprinkle();
+}
+
+/* 🎉 Sprinkle Effect */
+function sprinkle(){
+  for(let i=0;i<40;i++){
+    const c=document.createElement("div");
+    c.className="confetti";
+    c.style.left=Math.random()*100+"%";
+    c.style.background=`hsl(${Math.random()*360},70%,60%)`;
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(),3000);
+  }
+}
+
+/* 🎵 Music Toggle */
+function toggleMusic(){
+  const music=document.getElementById("bgMusic");
+  if(musicPlaying){
+    music.pause();
+  }else{
+    music.play();
+  }
+  musicPlaying=!musicPlaying;
+}
+</script>
+
+</body>
+</html>
